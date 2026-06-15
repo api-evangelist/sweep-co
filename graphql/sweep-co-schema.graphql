@@ -1,0 +1,1108 @@
+"""
+Sweep Carbon Management Platform – GraphQL Schema
+Conceptual schema derived from Sweep's REST API surface and public documentation.
+Covers emissions data, reduction actions, supplier collaboration, offset projects,
+and regulatory reporting frameworks (CSRD, GHG Protocol, ISSB, TCFD, CDP, SFDR).
+"""
+
+# ─────────────────────────────────────────────
+# Scalars
+# ─────────────────────────────────────────────
+
+scalar DateTime
+scalar Date
+scalar JSON
+scalar Upload
+
+# ─────────────────────────────────────────────
+# Enums
+# ─────────────────────────────────────────────
+
+enum EmissionScope {
+  SCOPE_1
+  SCOPE_2
+  SCOPE_3
+}
+
+enum EmissionCategory {
+  STATIONARY_COMBUSTION
+  MOBILE_COMBUSTION
+  FUGITIVE_EMISSIONS
+  PROCESS_EMISSIONS
+  PURCHASED_ELECTRICITY
+  PURCHASED_HEAT_STEAM
+  PURCHASED_GOODS_SERVICES
+  CAPITAL_GOODS
+  FUEL_ENERGY_ACTIVITIES
+  UPSTREAM_TRANSPORTATION
+  WASTE_GENERATED
+  BUSINESS_TRAVEL
+  EMPLOYEE_COMMUTING
+  UPSTREAM_LEASED_ASSETS
+  DOWNSTREAM_TRANSPORTATION
+  PROCESSING_SOLD_PRODUCTS
+  USE_OF_SOLD_PRODUCTS
+  END_OF_LIFE_SOLD_PRODUCTS
+  DOWNSTREAM_LEASED_ASSETS
+  FRANCHISES
+  INVESTMENTS
+}
+
+enum DataQuality {
+  PRIMARY
+  SECONDARY
+  ESTIMATED
+  MODELED
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum ReportingFramework {
+  GHG_PROTOCOL
+  CSRD
+  ISSB
+  TCFD
+  GRI
+  CDP
+  SFDR
+  UK_SRS
+  CA_SB253
+  CA_SB261
+}
+
+enum ReductionActionStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  ON_HOLD
+}
+
+enum SupplierEngagementStatus {
+  INVITED
+  REGISTERED
+  DATA_SUBMITTED
+  DATA_APPROVED
+  DATA_REJECTED
+}
+
+enum OffsetProjectType {
+  FORESTRY_LAND_USE
+  RENEWABLE_ENERGY
+  METHANE_CAPTURE
+  DIRECT_AIR_CAPTURE
+  BLUE_CARBON
+  SOIL_CARBON
+  COOKSTOVES
+  ENERGY_EFFICIENCY
+}
+
+enum OffsetCertificationStandard {
+  VERRA_VCS
+  GOLD_STANDARD
+  AMERICAN_CARBON_REGISTRY
+  CLIMATE_ACTION_RESERVE
+  PLAN_VIVO
+}
+
+enum OrganizationRole {
+  ADMIN
+  EDITOR
+  VIEWER
+  SUPPLIER
+  AUDITOR
+}
+
+enum AssetType {
+  FACILITY
+  VEHICLE
+  EQUIPMENT
+  REAL_ESTATE
+  INVESTMENT
+  PRODUCT
+}
+
+enum TargetType {
+  ABSOLUTE
+  INTENSITY
+  NET_ZERO
+  SCIENCE_BASED
+}
+
+enum TargetStatus {
+  DRAFT
+  ACTIVE
+  ACHIEVED
+  MISSED
+  REVISED
+}
+
+enum Periodicity {
+  MONTHLY
+  QUARTERLY
+  ANNUAL
+}
+
+enum EmissionUnit {
+  TCO2E
+  KCO2E
+  MTCO2E
+}
+
+enum FileFormat {
+  CSV
+  XLSX
+  PDF
+  JSON
+}
+
+enum IntegrationProvider {
+  SAP
+  ORACLE
+  WORKDAY
+  SALESFORCE
+  COUPA
+  NETSUITE
+  SERVICENOW
+  CUSTOM
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  APPROVE
+  REJECT
+  SUBMIT
+  EXPORT
+}
+
+# ─────────────────────────────────────────────
+# Core Entity Types
+# ─────────────────────────────────────────────
+
+type Organization {
+  id: ID!
+  name: String!
+  description: String
+  industry: String
+  country: String
+  region: String
+  employees: Int
+  revenue: Float
+  fiscalYearStart: Date
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  settings: OrganizationSettings
+  users: [User!]!
+  businessUnits: [BusinessUnit!]!
+  facilities: [Facility!]!
+  emissionSources: [EmissionSource!]!
+  reportingPeriods: [ReportingPeriod!]!
+  reductionTargets: [ReductionTarget!]!
+  suppliers: [Supplier!]!
+}
+
+type OrganizationSettings {
+  id: ID!
+  organizationId: ID!
+  defaultReportingFramework: ReportingFramework
+  defaultEmissionUnit: EmissionUnit!
+  fiscalYearStart: Int!
+  enabledFrameworks: [ReportingFramework!]!
+  marketBasedAccounting: Boolean!
+  locationBasedAccounting: Boolean!
+  updatedAt: DateTime!
+}
+
+type User {
+  id: ID!
+  email: String!
+  firstName: String!
+  lastName: String!
+  role: OrganizationRole!
+  organization: Organization!
+  active: Boolean!
+  lastLoginAt: DateTime
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type BusinessUnit {
+  id: ID!
+  name: String!
+  description: String
+  code: String
+  parentBusinessUnit: BusinessUnit
+  organization: Organization!
+  facilities: [Facility!]!
+  emissionData: [EmissionRecord!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Facility {
+  id: ID!
+  name: String!
+  description: String
+  assetType: AssetType!
+  address: Address
+  country: String!
+  region: String
+  businessUnit: BusinessUnit
+  organization: Organization!
+  emissionSources: [EmissionSource!]!
+  emissionRecords: [EmissionRecord!]!
+  floorArea: Float
+  floorAreaUnit: String
+  employees: Int
+  operationalStatus: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Address {
+  street: String
+  city: String
+  state: String
+  postalCode: String
+  country: String!
+  latitude: Float
+  longitude: Float
+}
+
+type EmissionSource {
+  id: ID!
+  name: String!
+  description: String
+  scope: EmissionScope!
+  category: EmissionCategory!
+  facility: Facility
+  businessUnit: BusinessUnit
+  organization: Organization!
+  activityType: String
+  fuelType: String
+  unit: String
+  emissionFactor: EmissionFactor
+  records: [EmissionRecord!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type EmissionFactor {
+  id: ID!
+  name: String!
+  value: Float!
+  unit: String!
+  source: String!
+  year: Int!
+  country: String
+  region: String
+  scope: EmissionScope
+  category: EmissionCategory
+  gwp100: Float
+  biogenic: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type EmissionRecord {
+  id: ID!
+  emissionSource: EmissionSource!
+  reportingPeriod: ReportingPeriod!
+  facility: Facility
+  businessUnit: BusinessUnit
+  scope: EmissionScope!
+  category: EmissionCategory!
+  activityData: Float!
+  activityUnit: String!
+  emissionFactor: EmissionFactor
+  tco2e: Float!
+  marketBasedTco2e: Float
+  biogenicTco2e: Float
+  dataQuality: DataQuality!
+  verificationStatus: VerificationStatus!
+  notes: String
+  attachments: [Attachment!]!
+  auditTrail: [AuditEntry!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ReportingPeriod {
+  id: ID!
+  organization: Organization!
+  year: Int!
+  startDate: Date!
+  endDate: Date!
+  periodicity: Periodicity!
+  status: String!
+  totalScope1Tco2e: Float
+  totalScope2LocationTco2e: Float
+  totalScope2MarketTco2e: Float
+  totalScope3Tco2e: Float
+  totalTco2e: Float
+  emissionRecords: [EmissionRecord!]!
+  reports: [Report!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Reduction & Targets
+# ─────────────────────────────────────────────
+
+type ReductionTarget {
+  id: ID!
+  organization: Organization!
+  name: String!
+  description: String
+  targetType: TargetType!
+  status: TargetStatus!
+  baselineYear: Int!
+  baselineTco2e: Float!
+  targetYear: Int!
+  reductionPercentage: Float!
+  targetTco2e: Float
+  intensityMetric: String
+  sbtiApproved: Boolean!
+  reductionActions: [ReductionAction!]!
+  progress: TargetProgress
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type TargetProgress {
+  targetId: ID!
+  currentTco2e: Float!
+  reductionAchievedTco2e: Float!
+  reductionAchievedPercentage: Float!
+  onTrack: Boolean!
+  projectedAchievementYear: Int
+  lastUpdated: DateTime!
+}
+
+type ReductionAction {
+  id: ID!
+  organization: Organization!
+  name: String!
+  description: String!
+  status: ReductionActionStatus!
+  category: String!
+  scope: EmissionScope
+  facility: Facility
+  businessUnit: BusinessUnit
+  estimatedAnnualReductionTco2e: Float!
+  actualAnnualReductionTco2e: Float
+  estimatedCost: Float
+  currency: String
+  startDate: Date
+  completionDate: Date
+  responsible: User
+  reductionTargets: [ReductionTarget!]!
+  attachments: [Attachment!]!
+  notes: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Supplier Collaboration
+# ─────────────────────────────────────────────
+
+type Supplier {
+  id: ID!
+  organization: Organization!
+  name: String!
+  description: String
+  country: String
+  industry: String
+  website: String
+  contactName: String
+  contactEmail: String
+  engagementStatus: SupplierEngagementStatus!
+  tier: Int
+  annualSpend: Float
+  currency: String
+  emissionRecords: [EmissionRecord!]!
+  dataRequests: [SupplierDataRequest!]!
+  scorecards: [SupplierScorecard!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SupplierDataRequest {
+  id: ID!
+  supplier: Supplier!
+  requestedBy: User!
+  title: String!
+  description: String
+  dueDate: Date
+  status: SupplierEngagementStatus!
+  requestedMetrics: [String!]!
+  reportingYear: Int!
+  response: SupplierDataResponse
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type SupplierDataResponse {
+  id: ID!
+  dataRequest: SupplierDataRequest!
+  submittedAt: DateTime
+  tco2e: Float
+  dataQuality: DataQuality
+  notes: String
+  attachments: [Attachment!]!
+  verificationStatus: VerificationStatus!
+}
+
+type SupplierScorecard {
+  id: ID!
+  supplier: Supplier!
+  year: Int!
+  overallScore: Float
+  dataCompleteness: Float
+  emissionIntensity: Float
+  reductionTrajectory: Float
+  engagementLevel: Float
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Offset Projects
+# ─────────────────────────────────────────────
+
+type OffsetProject {
+  id: ID!
+  name: String!
+  description: String!
+  projectType: OffsetProjectType!
+  certificationStandard: OffsetCertificationStandard!
+  country: String!
+  region: String
+  developer: String
+  vintage: Int
+  pricePerTon: Float
+  currency: String
+  totalCreditsAvailable: Float
+  totalCreditsPurchased: Float
+  sdgGoals: [Int!]!
+  verificationBody: String
+  registryUrl: String
+  purchases: [OffsetPurchase!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type OffsetPurchase {
+  id: ID!
+  organization: Organization!
+  offsetProject: OffsetProject!
+  purchaseDate: Date!
+  creditsTco2e: Float!
+  pricePerTon: Float!
+  totalCost: Float!
+  currency: String!
+  retirementDate: Date
+  retirementSerial: String
+  reportingPeriod: ReportingPeriod
+  notes: String
+  attachments: [Attachment!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Reporting
+# ─────────────────────────────────────────────
+
+type Report {
+  id: ID!
+  organization: Organization!
+  reportingPeriod: ReportingPeriod!
+  framework: ReportingFramework!
+  title: String!
+  status: String!
+  generatedAt: DateTime
+  generatedBy: User
+  downloadUrl: String
+  format: FileFormat
+  sections: [ReportSection!]!
+  disclosures: [Disclosure!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type ReportSection {
+  id: ID!
+  report: Report!
+  sectionCode: String!
+  title: String!
+  content: JSON
+  dataPoints: [DataPoint!]!
+  order: Int!
+}
+
+type DataPoint {
+  id: ID!
+  code: String!
+  label: String!
+  value: JSON
+  unit: String
+  framework: ReportingFramework!
+  notes: String
+}
+
+type Disclosure {
+  id: ID!
+  report: Report!
+  framework: ReportingFramework!
+  disclosureCode: String!
+  title: String!
+  response: JSON
+  status: String!
+  notes: String
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Audit & Assurance
+# ─────────────────────────────────────────────
+
+type AuditEntry {
+  id: ID!
+  entityType: String!
+  entityId: ID!
+  action: AuditAction!
+  performedBy: User!
+  performedAt: DateTime!
+  previousValue: JSON
+  newValue: JSON
+  ipAddress: String
+  notes: String
+}
+
+type Attachment {
+  id: ID!
+  filename: String!
+  mimeType: String!
+  sizeBytes: Int!
+  url: String!
+  uploadedBy: User!
+  uploadedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Integration & Data Ingestion
+# ─────────────────────────────────────────────
+
+type Integration {
+  id: ID!
+  organization: Organization!
+  provider: IntegrationProvider!
+  name: String!
+  description: String
+  active: Boolean!
+  lastSyncAt: DateTime
+  syncFrequency: Periodicity
+  mappings: [FieldMapping!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type FieldMapping {
+  id: ID!
+  integration: Integration!
+  sourceField: String!
+  targetField: String!
+  transformRule: String
+  active: Boolean!
+}
+
+type DataImport {
+  id: ID!
+  organization: Organization!
+  integration: Integration
+  filename: String
+  format: FileFormat!
+  status: String!
+  recordsTotal: Int
+  recordsImported: Int
+  recordsSkipped: Int
+  recordsFailed: Int
+  errors: [ImportError!]!
+  importedAt: DateTime
+  importedBy: User!
+  createdAt: DateTime!
+}
+
+type ImportError {
+  row: Int
+  field: String
+  message: String!
+  value: String
+}
+
+# ─────────────────────────────────────────────
+# Dashboard & Analytics
+# ─────────────────────────────────────────────
+
+type EmissionSummary {
+  organizationId: ID!
+  reportingYear: Int!
+  scope1Tco2e: Float!
+  scope2LocationTco2e: Float!
+  scope2MarketTco2e: Float!
+  scope3Tco2e: Float!
+  totalTco2e: Float!
+  offsetTco2e: Float!
+  netTco2e: Float!
+  byScope: [ScopeBreakdown!]!
+  byCategory: [CategoryBreakdown!]!
+  byFacility: [FacilityBreakdown!]!
+  byBusinessUnit: [BusinessUnitBreakdown!]!
+  trend: [EmissionTrendPoint!]!
+}
+
+type ScopeBreakdown {
+  scope: EmissionScope!
+  tco2e: Float!
+  percentage: Float!
+}
+
+type CategoryBreakdown {
+  category: EmissionCategory!
+  scope: EmissionScope!
+  tco2e: Float!
+  percentage: Float!
+}
+
+type FacilityBreakdown {
+  facility: Facility!
+  tco2e: Float!
+  percentage: Float!
+}
+
+type BusinessUnitBreakdown {
+  businessUnit: BusinessUnit!
+  tco2e: Float!
+  percentage: Float!
+}
+
+type EmissionTrendPoint {
+  year: Int!
+  totalTco2e: Float!
+  scope1Tco2e: Float!
+  scope2Tco2e: Float!
+  scope3Tco2e: Float!
+}
+
+type ScenarioModel {
+  id: ID!
+  organization: Organization!
+  name: String!
+  description: String
+  baselineYear: Int!
+  projectionYear: Int!
+  assumptions: JSON
+  projectedReductionTco2e: Float!
+  projectedTotalTco2e: Float!
+  actions: [ReductionAction!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# ─────────────────────────────────────────────
+# Pagination & Connection Types
+# ─────────────────────────────────────────────
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+  totalCount: Int!
+}
+
+type EmissionRecordConnection {
+  edges: [EmissionRecordEdge!]!
+  pageInfo: PageInfo!
+}
+
+type EmissionRecordEdge {
+  cursor: String!
+  node: EmissionRecord!
+}
+
+type SupplierConnection {
+  edges: [SupplierEdge!]!
+  pageInfo: PageInfo!
+}
+
+type SupplierEdge {
+  cursor: String!
+  node: Supplier!
+}
+
+type ReductionActionConnection {
+  edges: [ReductionActionEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ReductionActionEdge {
+  cursor: String!
+  node: ReductionAction!
+}
+
+# ─────────────────────────────────────────────
+# Input Types
+# ─────────────────────────────────────────────
+
+input EmissionRecordFilterInput {
+  scope: EmissionScope
+  category: EmissionCategory
+  facilityId: ID
+  businessUnitId: ID
+  reportingPeriodId: ID
+  dataQuality: DataQuality
+  verificationStatus: VerificationStatus
+  minTco2e: Float
+  maxTco2e: Float
+}
+
+input CreateOrganizationInput {
+  name: String!
+  description: String
+  industry: String
+  country: String!
+  region: String
+  employees: Int
+  revenue: Float
+  fiscalYearStart: Date
+}
+
+input UpdateOrganizationInput {
+  name: String
+  description: String
+  industry: String
+  country: String
+  region: String
+  employees: Int
+  revenue: Float
+  fiscalYearStart: Date
+}
+
+input CreateFacilityInput {
+  name: String!
+  description: String
+  assetType: AssetType!
+  country: String!
+  region: String
+  businessUnitId: ID
+  address: AddressInput
+  floorArea: Float
+  floorAreaUnit: String
+  employees: Int
+}
+
+input AddressInput {
+  street: String
+  city: String
+  state: String
+  postalCode: String
+  country: String!
+  latitude: Float
+  longitude: Float
+}
+
+input CreateEmissionSourceInput {
+  name: String!
+  description: String
+  scope: EmissionScope!
+  category: EmissionCategory!
+  facilityId: ID
+  businessUnitId: ID
+  activityType: String
+  fuelType: String
+  unit: String
+  emissionFactorId: ID
+}
+
+input CreateEmissionRecordInput {
+  emissionSourceId: ID!
+  reportingPeriodId: ID!
+  activityData: Float!
+  activityUnit: String!
+  emissionFactorId: ID
+  dataQuality: DataQuality!
+  notes: String
+}
+
+input UpdateEmissionRecordInput {
+  activityData: Float
+  activityUnit: String
+  emissionFactorId: ID
+  dataQuality: DataQuality
+  verificationStatus: VerificationStatus
+  notes: String
+}
+
+input CreateReductionActionInput {
+  name: String!
+  description: String!
+  category: String!
+  scope: EmissionScope
+  facilityId: ID
+  businessUnitId: ID
+  estimatedAnnualReductionTco2e: Float!
+  estimatedCost: Float
+  currency: String
+  startDate: Date
+  completionDate: Date
+  responsibleUserId: ID
+  reductionTargetIds: [ID!]
+}
+
+input CreateSupplierInput {
+  name: String!
+  description: String
+  country: String
+  industry: String
+  website: String
+  contactName: String
+  contactEmail: String!
+  tier: Int
+  annualSpend: Float
+  currency: String
+}
+
+input CreateReductionTargetInput {
+  name: String!
+  description: String
+  targetType: TargetType!
+  baselineYear: Int!
+  baselineTco2e: Float!
+  targetYear: Int!
+  reductionPercentage: Float!
+  intensityMetric: String
+  sbtiApproved: Boolean
+}
+
+input CreateOffsetPurchaseInput {
+  offsetProjectId: ID!
+  purchaseDate: Date!
+  creditsTco2e: Float!
+  pricePerTon: Float!
+  currency: String!
+  reportingPeriodId: ID
+  notes: String
+}
+
+input GenerateReportInput {
+  reportingPeriodId: ID!
+  framework: ReportingFramework!
+  title: String!
+  format: FileFormat!
+  includeScopes: [EmissionScope!]
+}
+
+input CreateDataImportInput {
+  integrationId: ID
+  format: FileFormat!
+  reportingPeriodId: ID
+}
+
+input PaginationInput {
+  first: Int
+  after: String
+  last: Int
+  before: String
+}
+
+# ─────────────────────────────────────────────
+# Query Root
+# ─────────────────────────────────────────────
+
+type Query {
+  # Organization
+  organization(id: ID!): Organization
+  organizations: [Organization!]!
+  organizationSettings(organizationId: ID!): OrganizationSettings
+
+  # Users
+  user(id: ID!): User
+  users(organizationId: ID!): [User!]!
+
+  # Business Units
+  businessUnit(id: ID!): BusinessUnit
+  businessUnits(organizationId: ID!): [BusinessUnit!]!
+
+  # Facilities
+  facility(id: ID!): Facility
+  facilities(organizationId: ID!, businessUnitId: ID): [Facility!]!
+
+  # Emission Sources
+  emissionSource(id: ID!): EmissionSource
+  emissionSources(organizationId: ID!, facilityId: ID, scope: EmissionScope): [EmissionSource!]!
+
+  # Emission Factors
+  emissionFactor(id: ID!): EmissionFactor
+  emissionFactors(scope: EmissionScope, category: EmissionCategory, country: String, year: Int): [EmissionFactor!]!
+
+  # Emission Records
+  emissionRecord(id: ID!): EmissionRecord
+  emissionRecords(
+    organizationId: ID!
+    filter: EmissionRecordFilterInput
+    pagination: PaginationInput
+  ): EmissionRecordConnection!
+
+  # Reporting Periods
+  reportingPeriod(id: ID!): ReportingPeriod
+  reportingPeriods(organizationId: ID!): [ReportingPeriod!]!
+
+  # Emission Summary / Analytics
+  emissionSummary(organizationId: ID!, reportingYear: Int!): EmissionSummary
+  emissionTrend(organizationId: ID!, startYear: Int!, endYear: Int!): [EmissionTrendPoint!]!
+
+  # Reduction Targets
+  reductionTarget(id: ID!): ReductionTarget
+  reductionTargets(organizationId: ID!): [ReductionTarget!]!
+  targetProgress(targetId: ID!): TargetProgress
+
+  # Reduction Actions
+  reductionAction(id: ID!): ReductionAction
+  reductionActions(
+    organizationId: ID!
+    status: ReductionActionStatus
+    pagination: PaginationInput
+  ): ReductionActionConnection!
+
+  # Suppliers
+  supplier(id: ID!): Supplier
+  suppliers(
+    organizationId: ID!
+    engagementStatus: SupplierEngagementStatus
+    pagination: PaginationInput
+  ): SupplierConnection!
+
+  # Supplier Data Requests
+  supplierDataRequest(id: ID!): SupplierDataRequest
+  supplierDataRequests(supplierId: ID!): [SupplierDataRequest!]!
+
+  # Offset Projects
+  offsetProject(id: ID!): OffsetProject
+  offsetProjects(projectType: OffsetProjectType, certificationStandard: OffsetCertificationStandard): [OffsetProject!]!
+
+  # Offset Purchases
+  offsetPurchase(id: ID!): OffsetPurchase
+  offsetPurchases(organizationId: ID!, reportingPeriodId: ID): [OffsetPurchase!]!
+
+  # Reports
+  report(id: ID!): Report
+  reports(organizationId: ID!, framework: ReportingFramework): [Report!]!
+
+  # Scenario Modeling
+  scenarioModel(id: ID!): ScenarioModel
+  scenarioModels(organizationId: ID!): [ScenarioModel!]!
+
+  # Integrations
+  integration(id: ID!): Integration
+  integrations(organizationId: ID!): [Integration!]!
+
+  # Data Imports
+  dataImport(id: ID!): DataImport
+  dataImports(organizationId: ID!): [DataImport!]!
+
+  # Audit Trail
+  auditTrail(entityType: String!, entityId: ID!): [AuditEntry!]!
+}
+
+# ─────────────────────────────────────────────
+# Mutation Root
+# ─────────────────────────────────────────────
+
+type Mutation {
+  # Organization
+  createOrganization(input: CreateOrganizationInput!): Organization!
+  updateOrganization(id: ID!, input: UpdateOrganizationInput!): Organization!
+
+  # Facilities
+  createFacility(organizationId: ID!, input: CreateFacilityInput!): Facility!
+  updateFacility(id: ID!, input: CreateFacilityInput!): Facility!
+  deleteFacility(id: ID!): Boolean!
+
+  # Emission Sources
+  createEmissionSource(organizationId: ID!, input: CreateEmissionSourceInput!): EmissionSource!
+  updateEmissionSource(id: ID!, input: CreateEmissionSourceInput!): EmissionSource!
+  deleteEmissionSource(id: ID!): Boolean!
+
+  # Emission Records
+  createEmissionRecord(input: CreateEmissionRecordInput!): EmissionRecord!
+  updateEmissionRecord(id: ID!, input: UpdateEmissionRecordInput!): EmissionRecord!
+  deleteEmissionRecord(id: ID!): Boolean!
+  verifyEmissionRecord(id: ID!, status: VerificationStatus!, notes: String): EmissionRecord!
+  bulkCreateEmissionRecords(records: [CreateEmissionRecordInput!]!): [EmissionRecord!]!
+
+  # Reporting Periods
+  createReportingPeriod(organizationId: ID!, year: Int!, startDate: Date!, endDate: Date!, periodicity: Periodicity!): ReportingPeriod!
+  closeReportingPeriod(id: ID!): ReportingPeriod!
+
+  # Reduction Targets
+  createReductionTarget(organizationId: ID!, input: CreateReductionTargetInput!): ReductionTarget!
+  updateReductionTarget(id: ID!, input: CreateReductionTargetInput!): ReductionTarget!
+  deleteReductionTarget(id: ID!): Boolean!
+
+  # Reduction Actions
+  createReductionAction(organizationId: ID!, input: CreateReductionActionInput!): ReductionAction!
+  updateReductionAction(id: ID!, input: CreateReductionActionInput!): ReductionAction!
+  updateReductionActionStatus(id: ID!, status: ReductionActionStatus!, notes: String): ReductionAction!
+  deleteReductionAction(id: ID!): Boolean!
+
+  # Suppliers
+  createSupplier(organizationId: ID!, input: CreateSupplierInput!): Supplier!
+  updateSupplier(id: ID!, input: CreateSupplierInput!): Supplier!
+  inviteSupplier(supplierId: ID!): Supplier!
+  deleteSupplier(id: ID!): Boolean!
+
+  # Supplier Data Requests
+  createSupplierDataRequest(supplierId: ID!, title: String!, requestedMetrics: [String!]!, reportingYear: Int!, dueDate: Date): SupplierDataRequest!
+  submitSupplierDataResponse(requestId: ID!, tco2e: Float!, dataQuality: DataQuality!, notes: String): SupplierDataResponse!
+  approveSupplierDataResponse(responseId: ID!, notes: String): SupplierDataResponse!
+  rejectSupplierDataResponse(responseId: ID!, reason: String!): SupplierDataResponse!
+
+  # Offset Purchases
+  createOffsetPurchase(organizationId: ID!, input: CreateOffsetPurchaseInput!): OffsetPurchase!
+  retireOffsets(purchaseId: ID!, retirementDate: Date!, retirementSerial: String!): OffsetPurchase!
+  deleteOffsetPurchase(id: ID!): Boolean!
+
+  # Reports
+  generateReport(input: GenerateReportInput!): Report!
+  deleteReport(id: ID!): Boolean!
+
+  # Scenario Models
+  createScenarioModel(organizationId: ID!, name: String!, baselineYear: Int!, projectionYear: Int!, assumptions: JSON, actionIds: [ID!]): ScenarioModel!
+  updateScenarioModel(id: ID!, name: String, assumptions: JSON, actionIds: [ID!]): ScenarioModel!
+  deleteScenarioModel(id: ID!): Boolean!
+
+  # Data Imports
+  initiateDataImport(organizationId: ID!, input: CreateDataImportInput!): DataImport!
+  uploadImportFile(importId: ID!, file: Upload!): DataImport!
+
+  # Integrations
+  createIntegration(organizationId: ID!, provider: IntegrationProvider!, name: String!, syncFrequency: Periodicity): Integration!
+  syncIntegration(id: ID!): Integration!
+  deleteIntegration(id: ID!): Boolean!
+
+  # User Management
+  inviteUser(organizationId: ID!, email: String!, role: OrganizationRole!): User!
+  updateUserRole(userId: ID!, role: OrganizationRole!): User!
+  deactivateUser(userId: ID!): User!
+}

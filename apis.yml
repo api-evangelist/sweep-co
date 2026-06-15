@@ -1,80 +1,78 @@
 aid: sweep-co
 name: Sweep
-description: >-
-  Sweep is an enterprise carbon and ESG data management platform helping
-  large organizations measure, manage, report, and reduce their carbon
-  emissions and broader sustainability performance across Scope 1, 2, and 3
-  following the GHG Protocol. Its platform centralizes sustainability data
-  across an organization and its value chain to produce audit-ready data
-  from a single source, covering carbon accounting, ESG disclosure,
-  value-chain engagement with supplier portals and automated data
-  collection, audit and assurance trails, and business intelligence with
-  dashboards and scenario modeling. Sweep supports compliance with the
-  CSRD, ISSB, GRI, CDP, SFDR, TCFD, UK SRS, the GHG Protocol, and US
-  state regulation including California SB 253 and SB 261, with vertical
-  solutions for asset managers, asset owners, private markets, banks,
-  healthcare, manufacturing, retail, energy, and consumer goods. Sweep
-  was named a Leader in the IDC MarketScape 2026 for Carbon Management
-  and recognized in the Verdantix 2026 Green Quadrant. The platform
-  exposes data ingestion via API and SFTP and integrates with ERP,
-  procurement, and HRMS systems, but Sweep does not publish a public
-  developer portal, OpenAPI specification, SDKs, or open-source repos —
-  API access is delivered through customer engagements rather than a
-  self-serve developer surface.
+description: Sweep is an enterprise carbon and ESG data management platform helping
+  large organizations measure, manage, report, and reduce their carbon emissions and
+  broader sustainability performance across Scope 1, 2, and 3 following the GHG Protocol.
+  Its platform centralizes sustainability data across an organization and its value
+  chain to produce audit-ready data from a single source, covering carbon accounting,
+  ESG disclosure, value-chain engagement with supplier portals and automated data
+  collection, audit and assurance trails, and business intelligence with dashboards
+  and scenario modeling. Sweep supports compliance with the CSRD, ISSB, GRI, CDP,
+  SFDR, TCFD, UK SRS, the GHG Protocol, and US state regulation including California
+  SB 253 and SB 261, with vertical solutions for asset managers, asset owners, private
+  markets, banks, healthcare, manufacturing, retail, energy, and consumer goods. Sweep
+  was named a Leader in the IDC MarketScape 2026 for Carbon Management and recognized
+  in the Verdantix 2026 Green Quadrant. The platform exposes data ingestion via API
+  and SFTP and integrates with ERP, procurement, and HRMS systems, but Sweep does
+  not publish a public developer portal, OpenAPI specification, SDKs, or open-source
+  repos — API access is delivered through customer engagements rather than a self-serve
+  developer surface.
 type: Index
 position: Provider
 access: 3rd-Party
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Sustainability
-  - Carbon Management
-  - Carbon Accounting
-  - ESG
-  - ESG Reporting
-  - Climate
-  - Greenhouse Gas
-  - GHG Protocol
-  - Scope 3 Emissions
-  - Financed Emissions
-  - CSRD
-  - ISSB
-  - SB 253
-  - TCFD
-  - SFDR
-  - CDP
-  - Supply Chain
-  - Value Chain
-  - Compliance
-  - Disclosure
-  - Audit
+- Sustainability
+- Carbon Management
+- Carbon Accounting
+- ESG
+- ESG Reporting
+- Climate
+- Greenhouse Gas
+- GHG Protocol
+- Scope 3 Emissions
+- Financed Emissions
+- CSRD
+- ISSB
+- SB 253
+- TCFD
+- SFDR
+- CDP
+- Supply Chain
+- Value Chain
+- Compliance
+- Disclosure
+- Audit
 url: https://raw.githubusercontent.com/api-evangelist/sweep-co/refs/heads/main/apis.yml
 created: '2026-05-25'
 modified: '2026-05-25'
 specificationVersion: '0.20'
 apis: []
 common:
-  - type: Website
-    url: https://www.sweep.net
-  - type: Platform
-    url: https://www.sweep.net/platform
-  - type: CarbonAccounting
-    url: https://www.sweep.net/landing/carbon-accounting-software
-  - type: ESGSoftware
-    url: https://www.sweep.net/landing/software-esg
-  - type: SustainabilityReporting
-    url: https://www.sweep.net/landing/sustainability-reporting-software
-  - type: TrackData
-    url: https://www.sweep.net/track-your-carbon-and-esg-data
-  - type: About
-    url: https://www.sweep.net/about
-  - type: Blog
-    url: https://www.sweep.net/blog
-  - type: HelpCenter
-    url: https://help.sweep.net
-  - type: Application
-    url: https://app.sweep.net
-  - type: LinkedIn
-    url: https://www.linkedin.com/company/sweep-net
+- type: Website
+  url: https://www.sweep.net
+- type: Platform
+  url: https://www.sweep.net/platform
+- type: CarbonAccounting
+  url: https://www.sweep.net/landing/carbon-accounting-software
+- type: ESGSoftware
+  url: https://www.sweep.net/landing/software-esg
+- type: SustainabilityReporting
+  url: https://www.sweep.net/landing/sustainability-reporting-software
+- type: TrackData
+  url: https://www.sweep.net/track-your-carbon-and-esg-data
+- type: About
+  url: https://www.sweep.net/about
+- type: Blog
+  url: https://www.sweep.net/blog
+- type: HelpCenter
+  url: https://help.sweep.net
+- type: Application
+  url: https://app.sweep.net
+- type: LinkedIn
+  url: https://www.linkedin.com/company/sweep-net
+- url: graphql/sweep-co-graphql.md
+  type: GraphQL
 maintainers:
-  - FN: Kin Lane
-    email: kin@apievangelist.com
+- FN: Kin Lane
+  email: kin@apievangelist.com
