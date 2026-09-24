@@ -95,8 +95,6 @@ common:
   url: https://app.sweep.net
 - type: LinkedIn
   url: https://www.linkedin.com/company/sweep-net
-- url: graphql/sweep-co-graphql.md
-  type: GraphQL
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
