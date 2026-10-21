@@ -2,6 +2,12 @@ generated: '2026-10-15'
 method: searched
 checked:
 - stripe/integrations/stripe-integration-edges.yml
+- https://carbonaccountingfinancials.com/en/signatories
+- https://files.sciencebasedtargets.org/production/files/companies-excel.xlsx
+- https://ghgprotocol.org/built-ghg-protocol
+- https://ghgprotocol.org/tools-built-ghg-protocol
+- https://sciencebasedtargets.org/target-dashboard
+- https://www.cdp.net/en/find-accredited-solutions-providers
 source:
 - stripe/integrations/stripe-integration-edges.yml
 edges:
@@ -22,3 +28,35 @@ edges:
   detected: '2026-10-15'
   detected_by: mirror-platform-listings.py
   category: climate
+- partner_name: CDP (Accredited Solutions Provider programme)
+  partner: null
+  partner_match: register
+  type: register
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://www.cdp.net/en/partners/sweep
+  category: CDP disclosure accredited solutions provider
+  contract_reference:
+    register: CDP Accredited Solutions Providers (cdp.net/en/find-accredited-solutions-providers + partner pages)
+    standard: CDP disclosure (CDP Accredited Solutions Provider programme)
+    spec_file: null
+    role: cdp-accredited-solutions-provider
+    registered_name: Sweep
+    register_id: https://www.cdp.net/en/partners/sweep
+    partner_tier: silver
+    register_statement: A silver software accredited solutions provider in the US
+    matched_domain: sweep.net
+    matched_by: domain
+    matched_via: contact-email domain on the ASP page (the page links no website)
+    certified_products:
+    - product: CDP Accredited Solutions Provider (software)
+      product_type: CDP ASP software
+      lapsed: false
+    signal_note: certified_products = one entry per accredited service type (software / consultancy / renewable
+      energy), never per product; partner_tier is the CDP accreditation level; verification ASPs are assessors and
+      are held
+    detected_by: sweep-carbon-accounting-sbti-pcaf.py
+    detected: '2026-10-21'
+  detected_by: sweep-carbon-accounting-sbti-pcaf.py
+  first_seen: '2026-10-21'

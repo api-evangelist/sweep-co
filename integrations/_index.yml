@@ -16,3 +16,35 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: sweep-co-cdp-accredited-solutions-provider-programme
+  label: CDP (Accredited Solutions Provider programme)
+  partner_name: CDP (Accredited Solutions Provider programme)
+  category: CDP disclosure accredited solutions provider
+  type: register
+  channel: standard-directory
+  evidence: https://www.cdp.net/en/partners/sweep
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: CDP Accredited Solutions Providers (cdp.net/en/find-accredited-solutions-providers + partner pages)
+    standard: CDP disclosure (CDP Accredited Solutions Provider programme)
+    spec_file: null
+    role: cdp-accredited-solutions-provider
+    registered_name: Sweep
+    register_id: https://www.cdp.net/en/partners/sweep
+    partner_tier: silver
+    register_statement: A silver software accredited solutions provider in the US
+    matched_domain: sweep.net
+    matched_by: domain
+    matched_via: contact-email domain on the ASP page (the page links no website)
+    certified_products:
+    - product: CDP Accredited Solutions Provider (software)
+      product_type: CDP ASP software
+      lapsed: false
+    signal_note: certified_products = one entry per accredited service type (software / consultancy / renewable
+      energy), never per product; partner_tier is the CDP accreditation level; verification ASPs are assessors and
+      are held
+    detected_by: sweep-carbon-accounting-sbti-pcaf.py
+    detected: '2026-10-21'
+  status: not-a-workflow
+  arazzo: null
