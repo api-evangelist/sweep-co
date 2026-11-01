@@ -1,4 +1,4 @@
-# sweep-co
+# Sweep
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -64,4 +64,86 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Sweep — enterprise carbon and ESG data management platform
+Sweep is an enterprise carbon and ESG data management platform helping large organizations measure, manage, report, and reduce their carbon emissions and broader sustainability performance across Scope 1, 2, and 3 following the GHG Protocol. Its platform centralizes sustainability data across an organization and its value chain to produce audit-ready data from a single source, covering carbon accounting, ESG disclosure, value-chain engagement with supplier portals and automated data collection, audit and assurance trails, and business intelligence with dashboards and scenario modeling. Sweep supports compliance with the CSRD, ISSB, GRI, CDP, SFDR, TCFD, UK SRS, the GHG Protocol, and US state regulation including California SB 253 and SB 261, with vertical solutions for asset managers, asset owners, private markets, banks, healthcare, manufacturing, retail, energy, and consumer goods. Sweep was named a Leader in the IDC MarketScape 2026 for Carbon Management and recognized in the Verdantix 2026 Green Quadrant. The platform exposes data ingestion via API and SFTP and integrates with ERP, procurement, and HRMS systems, but Sweep does not publish a public developer portal, OpenAPI specification, SDKs, or open-source repos — API access is delivered through customer engagements rather than a self-serve developer surface.
+
+**Areas:** Sustainability · Carbon Management · Carbon Accounting · ESG · ESG Reporting · Climate · Greenhouse Gas · GHG Protocol · Scope 3 Emissions · Financed Emissions · CSRD · ISSB
+
+## Sweep on APIs.io
+
+Everything profiled for Sweep is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/sweep-co/](https://apis.io/providers/sweep-co/)** — or go straight to one of the APIs or properties below.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### GraphQL (1)
+
+GraphQL schemas.
+
+- [Moved to /providers/sweep-co/](https://apis.io/graphqls/sweep-co/sweep-co-graphql/)
+
+#### Security (1)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Sweep Co Domain Security](https://apis.io/security/sweep-co/sweep-co-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.sweep.net)
+- [Blog](https://www.sweep.net/blog)
+
+## API Evangelist rating
+
+**Kin Score 5.0** — minimal · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 48.2 |
+| Contract quality | 0.0 |
+| Contract governance | 0.0 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 7.1 |
+| Access clarity | 0.0 |
+
+**Agent readiness 0.0** — human-only
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | — |
+| Agentic Access | — |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | — |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 4.9** — Energy & Utilities
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/sweep-co/](https://apis.io/providers/sweep-co/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Sweep: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/sweep-co/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
